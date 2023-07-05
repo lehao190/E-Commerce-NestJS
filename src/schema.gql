@@ -1,0 +1,29 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Product {
+  id: Int!
+  title: String!
+  description: String
+  reviews: Int
+}
+
+type User {
+  id: Int!
+  userName: String
+  products: [Product!]!
+}
+
+type Query {
+  me: User!
+  user(id: Int!): User!
+}
+
+type Mutation {
+  increaseReviews(productInput: ProductInput!): Product!
+}
+
+input ProductInput {
+  productId: Float!
+}
