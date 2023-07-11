@@ -7,8 +7,17 @@ export class User {
   id: number;
 
   @Field({ nullable: true })
-  userName?: string;
+  username?: string;
 
-  @Field(type => [Product])
-  products: Product[];
+  @Field({ nullable: true })
+  email?: string;
+
+  @Field({ nullable: true })
+  avatar?: string;
+
+  @Field({ nullable: true })
+  password?: string;
+
+  // @Field(type => [Product])
+  // products: Product[];
 }

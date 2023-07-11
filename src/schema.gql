@@ -2,17 +2,16 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Product {
-  id: Int!
-  title: String!
-  description: String
-  reviews: Int
-}
-
 type User {
   id: Int!
-  userName: String
-  products: [Product!]!
+  username: String
+  email: String
+  avatar: String
+  password: String
+}
+
+type AuthResponse {
+  access_token: String!
 }
 
 type Query {
@@ -21,9 +20,12 @@ type Query {
 }
 
 type Mutation {
-  increaseReviews(productInput: ProductInput!): Product!
+  login(loginInput: LoginInput!): AuthResponse!
+  register: User!
+  logout: User!
 }
 
-input ProductInput {
-  productId: Float!
+input LoginInput {
+  email: String!
+  password: String!
 }
