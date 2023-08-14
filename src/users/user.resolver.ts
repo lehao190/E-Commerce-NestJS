@@ -2,17 +2,17 @@ import { Args, Int, Mutation, Parent, Query, ResolveField, Resolver } from "@nes
 import { User } from "./models/user.model";
 import { Product } from "src/products/models/product.model";
 import { ProductInput } from "./user.inputs";
+import { UsersService } from "./users.service";
 
 @Resolver(of => User)
 export class UsersResolver {
-  constructor() {}
+  constructor(
+		private usersService: UsersService
+	) {}
 
-  @Query(returns => User, { name: 'user' })
+  @Query(returns => User, { name: 'user', nullable: true })
   async getUser(@Args('id', { type: () => Int }) id: number) {
-    return {
-			id: 1,
-			username: 'Test',
-    }
+		return this.usersService.findOne(id);
   }
 
   // @Mutation(returns => Product)

@@ -8,3 +8,18 @@ export class LoginInput {
   @Field()
   password: string;
 }
+
+@InputType()
+export class RegisterInput {
+  @Field()
+  email: string;
+
+  @Field()
+  username: string;
+
+  @Field({ nullable: true })
+  avatar?: string;
+
+  @Field()
+  password: string;
+}

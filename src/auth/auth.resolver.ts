@@ -6,8 +6,9 @@ import { CurrentUser } from "./current-user.decorator";
 import { UsersService } from "src/users/users.service";
 import { LocalAuthGuard } from "./local-auth.guard";
 import { AuthService } from "./auth.service";
-import { LoginInput } from "./auth.inputs";
+import { LoginInput, RegisterInput } from "./auth.inputs";
 import { AuthResponse } from "./auth.model";
+import { JwtPayload } from "./auth.types";
 
 @Resolver(of => User)
 export class AuthResolver {
@@ -16,26 +17,29 @@ export class AuthResolver {
     private authService: AuthService
   ) {}
 
+  // Get current authenticated user
   @Query(returns => User)
   @UseGuards(GqlAuthGuard)
-  me(@CurrentUser() user: User) {
-    return this.usersService.findOne(user.username);
+  me(@CurrentUser() payload: JwtPayload) {
+    return this.usersService.findByEmail(payload.email);
   }
 
+  // User login
   @Mutation(returns => AuthResponse)
   @UseGuards(LocalAuthGuard)
-  login(@Args('loginInput') loginInput: LoginInput): Promise<AuthResponse> {
+  async login(@Args('loginInput') loginInput: LoginInput): Promise<AuthResponse> {
     return this.authService.login(loginInput as User);
   }
 
+  // User signup
   @Mutation(returns => User)
-  @UseGuards(LocalAuthGuard)
-  register() {
-    // return this.authService.login();
+  register(@Args('registerInput') registerInput: RegisterInput) {
+    return this.authService.register(registerInput);
   }
 
+  // User Logout
   @Mutation(returns => User)
   logout() {
-    // return this.authService.login();
+    return this.authService.logout();
   }
 }

@@ -16,16 +16,23 @@ type AuthResponse {
 
 type Query {
   me: User!
-  user(id: Int!): User!
+  user(id: Int!): User
 }
 
 type Mutation {
   login(loginInput: LoginInput!): AuthResponse!
-  register: User!
+  register(registerInput: RegisterInput!): User!
   logout: User!
 }
 
 input LoginInput {
   email: String!
+  password: String!
+}
+
+input RegisterInput {
+  email: String!
+  username: String!
+  avatar: String
   password: String!
 }
