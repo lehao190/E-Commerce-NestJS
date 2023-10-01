@@ -1,0 +1,6 @@
+# Ignore git files
+.git
+.gitignore
+
+# Dependency folders
+node_modules

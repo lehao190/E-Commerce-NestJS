@@ -3,7 +3,7 @@ import { User } from './models/user.model';
 import { ICrudBase } from 'src/common/interfaces/crud-base.interface';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { User as PrismaUser, Prisma } from '@prisma/client';
+// import { User as PrismaUser, Prisma } from '@prisma/client';
 import { RegisterInput } from 'src/auth/auth.inputs';
 
 @Injectable()
