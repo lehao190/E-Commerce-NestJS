@@ -4,3 +4,9 @@
 
 # Dependency folders
 node_modules
+
+# Docker
+Dockerfile*
+
+# Nestjs-generated files and folders
+dist

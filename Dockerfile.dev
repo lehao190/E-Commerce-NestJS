@@ -1,8 +1,14 @@
+# Variables
+ARG NODE_VERSION=18
+
 # Use nodejs 18 alpine as base image
-FROM node:18-alpine
+FROM node:${NODE_VERSION}-alpine
 
 # Set the working directory
 WORKDIR /home/node/app
+
+# Set the ownership of the working directory to user and group node
+RUN chown -R node:node /home/node/app
 
 # Copy package.json and yarn.lock files
 COPY package.json yarn.lock ./
@@ -13,8 +19,11 @@ COPY prisma ./prisma/
 # Install dependencies using yarn
 RUN yarn install
 
+# Switch to node user
+USER node
+
 # Copy the rest of the files
-COPY . .
+COPY --chown=node:node . .
 
 # Expose port 3000
 EXPOSE 3000
