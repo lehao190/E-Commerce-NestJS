@@ -9,7 +9,7 @@ services:
       - ecommerce-backend
     volumes:
       - ./src:/home/node/app/src
-      - ./prisma:/home/node/app/prisma
+      # - ./prisma:/home/node/app/prisma
     ports:
       - ${PORT}:${PORT}
     depends_on:
@@ -23,6 +23,8 @@ services:
       - mysql-data:/var/lib/mysql
     networks:
       - ecommerce-backend
+    ports:
+      - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: secret
       MYSQL_DATABASE: Ecommerce
