@@ -1,9 +1,9 @@
 name: Ecommerce App Deployment
-run-name: ${{ github.actor }} is deploying app
+run-name: ${{ github.actor }} deploying app
 on: [push]
 jobs:
   Deployment:
-    runs-on: ubuntu:22.04
+    runs-on: ubuntu-22.04
     # runs-on: ubuntu-latest
     steps:
       - name: List files in the repository 1
