@@ -3,12 +3,12 @@ run-name: ${{ github.actor }} deploying app
 on: [push]
 jobs:
   Deployment:
+    if: ${{ 'false' }}
     runs-on: ubuntu-22.04
-    # runs-on: ubuntu-latest
     steps:
-      - name: List files in the repository 1
-        run: |
-          ls ${{ github.workspace }}
+      - name: Github context
+        run: ${{ toJson(github) }}
+
       - name: Check out repository code
         uses: actions/checkout@v4
       - name: Install node
@@ -16,7 +16,4 @@ jobs:
         with:
           node-version: '18'
       - run: yarn install
-      - name: List files in the repository 2
-        run: |
-          ls ${{ github.workspace }}
-      - run: echo "job's status ${{ job.status }}."
+      # - run: yarn test
