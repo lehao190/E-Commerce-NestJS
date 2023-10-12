@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} deploying app
 on: [push]
 jobs:
   Deployment:
-    if: ${{ 'false' }}
+    if: ${{ 'true' }}
     runs-on: ubuntu-22.04
     steps:
       - name: Github context
