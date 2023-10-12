@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Github context
-        run: ${{ github }}
+        run: echo "${{ toJson(github) }}"
 
       - name: Check out repository code
         uses: actions/checkout@v4
