@@ -6,14 +6,18 @@ jobs:
     if: ${{ 'true' }}
     runs-on: ubuntu-22.04
     steps:
-      - name: Github context
-        run: echo "${{ toJson(github) }}"
-
       - name: Check out repository code
         uses: actions/checkout@v4
       - name: Install node
         uses: actions/setup-node@v3
         with:
           node-version: '18'
+      
       - run: yarn install
+      - name: Install Railway
+        run: yarn global add @railway/cli
+      # - name: Deploy
+      #   run: railway up
+      #   env:
+      #     RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
       # - run: yarn test
