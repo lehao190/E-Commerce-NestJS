@@ -7,10 +7,6 @@ import { JwtPayload } from './auth.types';
 import { handlePromise } from 'src/common/utils/handle-promises';
 import { RegisterInput } from './auth.inputs';
 
-export const jwtConstants = {
-  secret: 'Secret JWT'
-} 
-
 @Injectable()
 export class AuthService {
   constructor(
