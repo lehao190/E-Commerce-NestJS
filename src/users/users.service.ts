@@ -3,8 +3,8 @@ import { User } from './models/user.model';
 import { ICrudBase } from 'src/common/interfaces/crud-base.interface';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/prisma/prisma.service';
-// import { User as PrismaUser, Prisma } from '@prisma/client';
-import { RegisterInput } from 'src/auth/auth.inputs';
+import { RegisterInput } from 'src/auth/inputs/auth.inputs';
+import { TUser } from './types/user.types';
 
 @Injectable()
 export class UsersService implements ICrudBase<User>{
@@ -25,7 +25,7 @@ export class UsersService implements ICrudBase<User>{
     },
   ];
 
-  async create(data: RegisterInput): Promise<User> {
+  async create(data: RegisterInput): Promise<TUser> {
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
     return this.prisma.user.create({
@@ -55,7 +55,7 @@ export class UsersService implements ICrudBase<User>{
 
   async findByEmail(
     email: string
-  ): Promise<User | undefined> {
+  ): Promise<TUser | null> {
     return this.prisma.user.findUnique({
       where: {
         email
