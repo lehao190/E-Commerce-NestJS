@@ -7,9 +7,10 @@ import { UsersService } from "src/users/users.service";
 import { LocalAuthGuard } from "./guards/local-auth.guard";
 import { AuthService } from "./auth.service";
 import { LoginInput, RegisterInput } from "./inputs/auth.inputs";
-import { AuthResponse } from "./models/auth.model";
-import { TAuth, JwtPayload } from "./types/auth.types";
-import { TUser } from "src/users/types/user.types";
+import { AuthRefreshResponse, AuthResponse } from "./models/auth.model";
+import { TAuth, JwtPayload, TAuthWithoutUser } from "./types/auth.types";
+import { TUser  } from "src/users/types/user.types";
+import { JwtRefreshAuthGuard } from "./guards/jwt-refresh-auth.guard";
 
 @Resolver(of => User)
 export class AuthResolver {
@@ -25,12 +26,18 @@ export class AuthResolver {
     return this.usersService.findByEmail(payload.email);
   }
 
+  @Query(returns => AuthRefreshResponse)
+  @UseGuards(JwtRefreshAuthGuard)
+  refresh(@Context() context, @CurrentUser() payload: JwtPayload): Promise<TAuthWithoutUser> {
+    // console.log('resolver payload: ', payload);
+    return this.authService.generateTokensPair(payload);
+  }
+
   // User login
   @Mutation(returns => AuthResponse)
   @UseGuards(LocalAuthGuard)
-  login(@Context() context, @Args('loginInput') loginInput: LoginInput): Promise<TAuth> {
-    console.log('context: ', context.user);
-    return this.authService.login(loginInput);
+  login(@Context() context, @Args('loginInput') _: LoginInput): Promise<TAuth> {
+    return this.authService.login(context.user);
   }
 
   // User signup

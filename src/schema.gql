@@ -4,18 +4,25 @@
 
 type User {
   id: Int!
-  username: String
-  email: String
+  username: String!
+  email: String!
   avatar: String
-  password: String
 }
 
 type AuthResponse {
   access_token: String!
+  refresh_token: String!
+  user: User!
+}
+
+type AuthRefreshResponse {
+  access_token: String!
+  refresh_token: String!
 }
 
 type Query {
   me: User!
+  refresh: AuthRefreshResponse!
   user(id: Int!): User
 }
 

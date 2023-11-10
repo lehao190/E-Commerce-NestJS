@@ -1,9 +1,11 @@
-export const handlePromise = async <T>(promise: Promise<T>): Promise<[T | null, Error | null]> => {
+export const handlePromise = async <T>(promise: Promise<T>): Promise<[T, null] | [null, Error]> => {
   try {
     const result = await promise;
     return [result, null];
-  } catch (error) {
+  } catch (error: unknown) {
     console.error(error);
-    return [null, error];
+    
+    if(error instanceof Error)
+      return [null, error];
   }
 }
