@@ -20,6 +20,10 @@ type AuthRefreshResponse {
   refresh_token: String!
 }
 
+type LogoutResponse {
+  message: String!
+}
+
 type Query {
   me: User!
   refresh: AuthRefreshResponse!
@@ -29,7 +33,7 @@ type Query {
 type Mutation {
   login(loginInput: LoginInput!): AuthResponse!
   register(registerInput: RegisterInput!): User!
-  logout: User!
+  logout: LogoutResponse!
 }
 
 input LoginInput {

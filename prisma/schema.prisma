@@ -16,5 +16,5 @@ model User {
   username  String
   avatar    String?
   password  String
-  refresh_token String?
+  refresh_token String? @db.Text
 }

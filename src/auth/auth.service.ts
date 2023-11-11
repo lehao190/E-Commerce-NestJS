@@ -1,4 +1,8 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
@@ -16,22 +20,21 @@ export class AuthService {
   ) {}
 
   // Check for valid refresh token
-  async checkIfRefreshTokenValid(refreshToken: string, payload: JwtPayload): Promise<JwtPayload> {
+  async checkIfRefreshTokenValid(
+    refreshToken: string,
+    payload: JwtPayload,
+  ): Promise<JwtPayload> {
     const user = await this.usersService.findOne(payload.userId);
 
-    if(!user)
-      throw new NotFoundException();
-    
-    if(!user.refresh_token)
-      throw new ForbiddenException();
+    if (!user) throw new NotFoundException();
 
-    const isRefreshTokenMatch = await bcrypt.compare(refreshToken, user.refresh_token);
-    
-    if(isRefreshTokenMatch) {
+    if (!user.refresh_token) throw new ForbiddenException();
+
+    if (refreshToken === user.refresh_token) {
       return payload = {
+        email: payload.email,
         userId: payload.userId,
         username: payload.username,
-        email: payload.email
       };
     } else {
       // Remove refresh token from database if detected invalidated refresh token
@@ -48,68 +51,73 @@ export class AuthService {
     const [refreshToken, accessToken] = await Promise.all([
       this.jwtService.signAsync(
         {
-          ...payload
+          ...payload,
         },
         {
           secret: this.configService.get<string>('REFRESH_TOKEN_SECRET'),
           expiresIn: this.configService.get<string>('REFRESH_TOKEN_EXPIRES'),
-        }
+        },
       ),
       this.jwtService.signAsync(
         {
-          ...payload
+          ...payload,
         },
         {
           secret: this.configService.get<string>('ACCESS_TOKEN_SECRET'),
           expiresIn: this.configService.get<string>('ACCESS_TOKEN_EXPIRES'),
-        }
+        },
       ),
     ]);
 
-    const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
-
     await this.usersService.update(payload.userId, {
-      refresh_token: hashedRefreshToken,
+      refresh_token: refreshToken,
     });
 
     return {
       access_token: accessToken,
-      refresh_token: refreshToken
+      refresh_token: refreshToken,
     };
   }
 
   // Check if user exists
   async validateUser(email: string, password: string): Promise<TUser> {
     const user = await this.usersService.findByEmail(email);
-    if(!user)
-      throw new NotFoundException();
+    if (!user) throw new NotFoundException();
 
     const isPasswordMatch = await bcrypt.compare(password, user.password);
-    if(!isPasswordMatch)
-      throw new ForbiddenException();
+    if (!isPasswordMatch) throw new ForbiddenException();
 
-    if (user && isPasswordMatch)
-      return user;
+    if (user && isPasswordMatch) return user;
 
     return null;
   }
 
   async login(user: TUser): Promise<TAuth> {
-    const payload = { email: user.email, userId: user.id, username: user.username };
+    const payload = {
+      email: user.email,
+      userId: user.id,
+      username: user.username,
+    };
     const tokens = await this.generateTokensPair(payload);
 
     return {
       user,
       access_token: tokens.access_token,
       refresh_token: tokens.refresh_token,
-    }
+    };
   }
 
   async register(data: RegisterInput): Promise<TUser> {
     return this.usersService.create(data);
   }
 
-  async logout() {
-    return
+  async logout(id: number) {
+    await this.usersService.update(id, {
+      refresh_token: null,
+    });
+
+    return {
+      message: 'Logout Successfully!',
+    };
   }
 }

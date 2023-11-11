@@ -7,7 +7,7 @@ import { UsersService } from "src/users/users.service";
 import { LocalAuthGuard } from "./guards/local-auth.guard";
 import { AuthService } from "./auth.service";
 import { LoginInput, RegisterInput } from "./inputs/auth.inputs";
-import { AuthRefreshResponse, AuthResponse } from "./models/auth.model";
+import { AuthRefreshResponse, AuthResponse, LogoutResponse } from "./models/auth.model";
 import { TAuth, JwtPayload, TAuthWithoutUser } from "./types/auth.types";
 import { TUser  } from "src/users/types/user.types";
 import { JwtRefreshAuthGuard } from "./guards/jwt-refresh-auth.guard";
@@ -47,8 +47,9 @@ export class AuthResolver {
   }
 
   // User Logout
-  @Mutation(returns => User)
-  logout() {
-    return this.authService.logout();
+  @Mutation(returns => LogoutResponse)
+  @UseGuards(GqlAuthGuard)
+  logout(@CurrentUser() payload: JwtPayload) {
+    return this.authService.logout(payload.userId);
   }
 }

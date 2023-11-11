@@ -21,3 +21,9 @@ export class AuthRefreshResponse {
   @Field()
   refresh_token: string;
 }
+
+@ObjectType()
+export class LogoutResponse {
+  @Field()
+  message: string;
+}
