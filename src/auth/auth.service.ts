@@ -7,7 +7,7 @@ import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { RegisterInput } from './inputs/auth.inputs';
-import { JwtPayload, TAuth, TAuthWithoutUser } from './types/auth.types';
+import { JwtDecodedPayload, JwtPayload, TAuth, TAuthWithoutUser } from './types/auth.types';
 import { TUser } from 'src/users/types/user.types';
 import { ConfigService } from '@nestjs/config';
 
@@ -73,9 +73,12 @@ export class AuthService {
       refresh_token: refreshToken,
     });
 
+    const decodedPayload = this.jwtService.decode(accessToken) as JwtDecodedPayload;
+
     return {
       access_token: accessToken,
       refresh_token: refreshToken,
+      expires_at: decodedPayload.exp,
     };
   }
 
@@ -102,8 +105,7 @@ export class AuthService {
 
     return {
       user,
-      access_token: tokens.access_token,
-      refresh_token: tokens.refresh_token,
+      ...tokens,
     };
   }
 

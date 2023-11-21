@@ -6,9 +6,15 @@ export type JwtPayload = {
   email: string;
 };
 
+export type JwtDecodedPayload = {
+  iat: number;
+  exp: number;
+} & JwtPayload;
+
 export type TAuth = {
   access_token: string;
   refresh_token: string;
+  expires_at: number;
   user: TUser;
 };
 

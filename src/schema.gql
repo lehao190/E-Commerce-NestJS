@@ -12,12 +12,14 @@ type User {
 type AuthResponse {
   access_token: String!
   refresh_token: String!
+  expires_at: Float!
   user: User!
 }
 
 type AuthRefreshResponse {
   access_token: String!
   refresh_token: String!
+  expires_at: Float!
 }
 
 type LogoutResponse {

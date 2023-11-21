@@ -9,6 +9,9 @@ export class AuthResponse {
   @Field()
   refresh_token: string;
 
+  @Field()
+  expires_at: number;
+
   @Field(type => User)
   user: User;
 }
@@ -20,6 +23,9 @@ export class AuthRefreshResponse {
   
   @Field()
   refresh_token: string;
+
+  @Field()
+  expires_at: number;
 }
 
 @ObjectType()
