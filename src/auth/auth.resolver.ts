@@ -29,7 +29,6 @@ export class AuthResolver {
   @Query(returns => AuthRefreshResponse)
   @UseGuards(JwtRefreshAuthGuard)
   refresh(@Context() context, @CurrentUser() payload: JwtPayload): Promise<TAuthWithoutUser> {
-    // console.log('resolver payload: ', payload);
     return this.authService.generateTokensPair(payload);
   }
 

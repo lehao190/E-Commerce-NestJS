@@ -16,7 +16,8 @@ export class UsersService implements ICrudBase<TPrismaUser>{
       data: {
         username: data.username,
         email: data.email,
-        password: hashedPassword
+        password: hashedPassword,
+        avatar: data.avatar ?? null,
       }
     });
   }

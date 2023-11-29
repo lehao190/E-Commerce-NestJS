@@ -14,7 +14,8 @@ model User {
   id    Int     @default(autoincrement()) @id
   email String  @unique
   username  String
-  avatar    String?
+  avatar  String? @db.LongText
+  // avatar    Bytes?   @db.LongBlob
   password  String
   refresh_token String? @db.Text
 }
