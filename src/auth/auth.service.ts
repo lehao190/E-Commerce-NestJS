@@ -1,4 +1,5 @@
 import {
+  ConflictException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -110,6 +111,9 @@ export class AuthService {
   }
 
   async register(data: RegisterInput): Promise<TUser> {
+    const user = await this.usersService.findByEmail(data.email);
+    if (user) throw new ConflictException();
+
     return this.usersService.create(data);
   }
 
