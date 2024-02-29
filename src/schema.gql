@@ -26,16 +26,65 @@ type LogoutResponse {
   message: String!
 }
 
+type Meta {
+  total: Int!
+  lastPage: Int!
+  currentPage: Int!
+  perPage: Int!
+  prev: Int
+  next: Int
+}
+
+type Comment {
+  id: Int!
+  text: String!
+  rating: Int!
+}
+
+type PaginatedComment {
+  data: [Comment!]!
+  meta: Meta!
+}
+
+type Product {
+  id: Int!
+  name: String!
+  description: String!
+  price: Int!
+  quantity: Int!
+  category: String!
+  image: String!
+  ratings: Int
+  comments: [Comment!]!
+}
+
+type PaginatedProduct {
+  data: [Product!]!
+  meta: Meta!
+}
+
 type Query {
   me: User!
   refresh: AuthRefreshResponse!
   user(id: Int!): User
+  getProductsByPage(paginationInput: PaginationInput!): PaginatedProduct!
+  getProductDetails(id: Int!): Product!
+  getCommentsByPage(id: Int!, paginationInput: PaginationInput!): PaginatedComment!
+}
+
+input PaginationInput {
+  perPage: Int!
+  page: Int!
 }
 
 type Mutation {
   login(loginInput: LoginInput!): AuthResponse!
   register(registerInput: RegisterInput!): User!
   logout: LogoutResponse!
+  createProduct(createProductInput: CreateProductInput!): Product!
+  updateProduct(id: Int!, updateProductInput: UpdateProductInput!): Product!
+  deleteProduct(id: Int!): Product!
+  createComment(createCommentInput: CreateCommentInput!): Comment!
 }
 
 input LoginInput {
@@ -48,4 +97,31 @@ input RegisterInput {
   username: String!
   avatar: String
   password: String!
+}
+
+input CreateProductInput {
+  name: String!
+  description: String!
+  image: String!
+  price: Int!
+  quantity: Int!
+  ratings: Int
+  category: String!
+}
+
+input UpdateProductInput {
+  name: String
+  description: String
+  image: String
+  price: Int
+  quantity: Int
+  ratings: Int
+  category: String
+}
+
+input CreateCommentInput {
+  text: String!
+  rating: Int!
+  commenterId: Int!
+  productId: Int!
 }
